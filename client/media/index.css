@@ -1,0 +1,28 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
+}
+
+.changePassword {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
+}
+
+.text-center{
+    text-align: center;
+}
+
+nav {
+    display: flex;
+}
