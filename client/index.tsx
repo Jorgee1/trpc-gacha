@@ -9,6 +9,7 @@ import { Home } from './home.js'
 import { UserListView } from './user.js'
 import { CharacterView } from './character/view.js'
 import { CharacterAdd } from './character/add.js'
+import { CharacterEdit, characterEditLoader } from './character/edit.js'
 import { Register } from './register.js'
 import { Profile } from './profile.js'
 import { AuthProvider, ProtectedView } from './auth.js'
@@ -40,6 +41,11 @@ const App = () => {
                 {
                     path: 'add',
                     element: <CharacterAdd/>
+                },
+                {
+                    path: 'edit/:id',
+                    loader: characterEditLoader,
+                    element: <CharacterEdit/>
                 }
             ]
         },

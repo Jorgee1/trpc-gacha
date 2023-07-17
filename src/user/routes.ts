@@ -64,5 +64,5 @@ export const userRouter = router({
             await db.session.delete({where: {userId: user.id}})
             return true
         }),
-    whoami: publicProcedure.query(async ({ctx}) => ctx.user)
+    whoami: publicProcedure.query(async ({ctx}) => ctx.user || null)
 })

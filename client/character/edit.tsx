@@ -9,5 +9,12 @@ export const characterEditLoader = ({ params }: LoaderFunctionArgs) => {
 
 export const CharacterEdit = () => {
     const id = useLoaderData() as string
-    return <></>
+
+    const { data, isLoading } = trpc.character.get.useQuery({id})
+
+    return <form>
+        <div>ID: { id }</div>
+        <div>Name: { data?.name }</div>
+        <div>Tier: { data?.tier }</div>
+    </form>
 }

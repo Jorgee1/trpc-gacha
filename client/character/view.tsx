@@ -9,6 +9,6 @@ export const CharacterView = () => {
     
     return <>
         <Link to="add">Add</Link>
-        {data?.map(e => <div>{e.name}</div>)}
+        {data?.map(e => <div key={e.id}>{e.name} <Link to={`edit/${e.id}`}>Edit</Link> </div>)}
     </>
 }

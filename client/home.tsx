@@ -26,6 +26,7 @@ export const Home = () => {
         <User/>
         <div>
             <Link to='/user'>User *Admin*</Link>
+            <Link to='/character'>Character</Link>
         </div>
         
     </>
