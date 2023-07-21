@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { httpBatchLink } from '@trpc/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider, ProtectedView } from './auth.js'
 import { trpc } from './trpc.js'
 import { LogIn } from './login.js'
 import { Home } from './home.js'
@@ -12,8 +13,13 @@ import { CharacterAdd } from './character/add.js'
 import { CharacterEdit, characterEditLoader } from './character/edit.js'
 import { Register } from './register.js'
 import { Profile } from './profile.js'
-import { AuthProvider, ProtectedView } from './auth.js'
+import { Inventory } from './inventory.js'
+import { BannerView } from './banner/view.js'
+import { BannerAdd } from './banner/add.js'
+import { BannerEdit, bannerEditLoader } from './banner/edit.js'
+import { PullView, pullLoader } from './pull/view.js'
 import './media/index.css'
+
 
 
 const App = () => {
@@ -63,6 +69,42 @@ const App = () => {
             children: [{
                 path: '',
                 element: <Profile/>
+            }]
+        },
+        {
+            path: '/inventory',
+            element: <ProtectedView/>,
+            children: [{
+                path: '',
+                element: <Inventory/>
+            }]
+        },
+        {
+            path: '/banner',
+            element: <ProtectedView/>,
+            children: [
+                {
+                    path: '',
+                    element: <BannerView/>
+                },
+                {
+                    path: 'add',
+                    element: <BannerAdd/>
+                },
+                {
+                    path: 'edit/:id',
+                    element: <BannerEdit/>,
+                    loader: bannerEditLoader
+                }
+            ]
+        },
+        {
+            path: '/pull',
+            element: <ProtectedView/>,
+            children: [{
+                path: ':id',
+                element: <PullView/>,
+                loader: pullLoader
             }]
         },
         {

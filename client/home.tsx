@@ -19,7 +19,7 @@ export const Home = () => {
         </nav>
     }
 
-
+    const { data } = trpc.banner.getActiveBanners.useQuery()
 
     return <>
         <h1>Home</h1>
@@ -27,7 +27,9 @@ export const Home = () => {
         <div>
             <Link to='/user'>User *Admin*</Link>
             <Link to='/character'>Character</Link>
+            <Link to='/inventory'>Inventory</Link>
+            <Link to='/banner'>Banner Management</Link>
         </div>
-        
+        { data?.map((e,i) => <div key={i}>{e.name} <Link to={`/pull/${e.id}`}>Pull</Link></div>) }
     </>
 }

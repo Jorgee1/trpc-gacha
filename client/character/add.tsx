@@ -37,7 +37,7 @@ export const CharacterAdd = () => {
             <input {...register('name', {required: true})}/>
             <div>{errors.name?.message}</div>
 
-            <input {...register('tier', {required: true, valueAsNumber: true})}/>
+            <input type='number' {...register('tier', {required: true, valueAsNumber: true})}/>
             <div>{errors.tier?.message}</div>
 
             <button>Create</button>

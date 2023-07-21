@@ -16,6 +16,7 @@ model User {
 
   hash Hash?
   session Session?
+  characters CharactersOnPlayer[]
 }
 
 model Hash {
@@ -38,4 +39,38 @@ model Character {
   id String @id @default(cuid())
   name String @unique
   tier Int @default(1) // 1, 2, 3
+  users CharactersOnPlayer[]
+  banners CharactersOnBanners[]
 }
+
+model CharactersOnPlayer {
+  userId String
+  characterId String
+  repeats Int @default(1)
+
+  user User @relation(fields: [userId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@id([userId, characterId])
+}
+
+model Banner {
+  id String @id @default(cuid())
+  name String
+  isActive Boolean @default(false)
+  characters CharactersOnBanners[]
+}
+
+model CharactersOnBanners {
+  bannerId String
+  characterId String
+
+  banner Banner @relation(fields: [bannerId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@id([bannerId, characterId])
+}
+
+
+
+

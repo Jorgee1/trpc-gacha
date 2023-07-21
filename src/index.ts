@@ -8,7 +8,7 @@ import type { AppRouter } from './routes.js'
 
 
 const port = 3000
-const fastify = Fastify()
+const fastify = Fastify({logger: true})
 
 fastify.register(FastifyCookie, {
     secret: '---------',

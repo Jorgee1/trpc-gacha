@@ -6,7 +6,10 @@ export const characterRouter = router({
     list: privateProcedure
         .query(async () => await db.character.findMany()),
     create: privateProcedure
-        .input(z.object({name: z.string()}))
+        .input(z.object({
+            name: z.string(),
+            tier: z.number()
+        }))
         .mutation(async ({input}) => await db.character.create({data: input})),
     delete: privateProcedure
         .input(z.object({id: z.string()}))
