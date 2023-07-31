@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createContext, useContext } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import { trpc } from './trpc.js'
@@ -29,8 +29,15 @@ export const AuthProvider = ({children}: {children: JSX.Element}) => {
 export const useAuth = () => useContext(auth)
 
 export const ProtectedView = () => {
-    const { isAuth } = useAuth()
-    const {} = trpc.user.whoami.useQuery(undefined)
+    const { isAuth, logIn, logOut } = useAuth()
+    const { isLoading, data, isSuccess,  } = trpc.user.whoami.useQuery(undefined,{cacheTime: 0, refetchInterval: 1000})
+
+    useEffect(() => {
+        if (isSuccess && !data) logOut()
+    }, [isSuccess])
+
+    if (isLoading) return 'Loading'
+
     return isAuth? <Outlet/>: <Navigate to='/login'/>
 }
 

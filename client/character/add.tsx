@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const characterFormSchema = z.object({
-    name: z.string().nonempty(),
+    name: z.string().min(1, {message: 'Required'}),
     tier: z.number().min(1).max(3)
 })
 type CharacterFormType = z.infer<typeof characterFormSchema>
@@ -34,11 +34,11 @@ export const CharacterAdd = () => {
     console.log(errors)
     return <>
         <form className='flex-column' onSubmit={handleSubmit(submit)}>
-            <input {...register('name', {required: true})}/>
-            <div>{errors.name?.message}</div>
+            <input {...register('name')}/>
+            { errors.name && <div>{errors.name?.message}</div> }
 
-            <input type='number' {...register('tier', {required: true, valueAsNumber: true})}/>
-            <div>{errors.tier?.message}</div>
+            <input type='number' {...register('tier', {valueAsNumber: true})}/>
+            { errors.tier && <div>{errors.tier?.message}</div> }
 
             <button>Create</button>
         </form>

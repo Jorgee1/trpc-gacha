@@ -79,7 +79,6 @@ export const userRouter = router({
 
             if (isCharacterOnPlayer) return false
 
-            console.log('HYAAAAAAAAAA')
             console.log('ASASDS', await db.charactersOnPlayer.create({data: {
                 characterId,
                 userId: user.id
@@ -93,5 +92,8 @@ export const userRouter = router({
             //return await db.character.findMany({where: {users: {some: {userId: user.id}}}})
             return await db.charactersOnPlayer.findMany({where: {userId: user.id}, include: {character: true}})
         }),
-    whoami: publicProcedure.query(async ({ctx}) => ctx.user || null)
+    whoami: publicProcedure.query(async ({ctx}) => {
+        console.log('WHOAMI', ctx.user)
+        return ctx.user
+    })
 })

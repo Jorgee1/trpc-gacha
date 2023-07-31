@@ -1,17 +1,29 @@
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { trpc } from './trpc.js'
+
+
+const changePasswordFormSchema = z.object({
+    password: z.string().min(1),
+    newPassword: z.string().min(1),
+    newPasswordConfirmation: z.string().min(1)
+}).refine(({newPassword, newPasswordConfirmation}) => newPassword === newPasswordConfirmation, {
+    path: ['newPasswordConfirmation'],
+    message: 'Passwords don\'t match'
+})
+
+type changePasswordForm = z.infer<typeof changePasswordFormSchema>
+
 
 export const Profile = () => {
     const { data, isLoading } = trpc.user.whoami.useQuery()
     const [ result, setResult ] = useState('')
 
-    type changePasswordForm = {
-        password: string
-        newPassword: string,
-        newPasswordConfirmation: string
-    }
-    const { register, handleSubmit, formState: {errors}, setError, reset } = useForm<changePasswordForm>()
+    const { register, handleSubmit, formState: {errors}, setError, reset } = useForm<changePasswordForm>({
+        resolver: zodResolver(changePasswordFormSchema)
+    })
     const changePassword = trpc.user.changePassword.useMutation({
         onSuccess: (status) => {
             if (status) setResult('Password Changed')
@@ -36,29 +48,29 @@ export const Profile = () => {
             <div>
                 <label>
                     <div>Password</div>
-                    <input {...register('password', {required: true})} type="text" />
+                    <input {...register('password')} type="text" />
                 </label>
 
-                { errors.password?.type === 'required' && <div>Required</div> }
+                { errors.password && <div>{errors.password.message}</div> }
             </div>
 
             <div>
                 <label>
                     <div>New Password</div>
-                    <input {...register('newPassword', {required: true})} type="text"/>
+                    <input {...register('newPassword')} type="text"/>
                 </label>
 
-                { errors.newPassword?.type === 'required' && <div>Required</div> }
+                { errors.newPassword && <div>{errors.newPassword.message}</div> }
             </div>
 
             <div>
                 <label>
                     <div>New Password</div>
-                    <input {...register('newPasswordConfirmation', {required: true})} type="text" />
+                    <input {...register('newPasswordConfirmation')} type="text" />
                 </label>
 
-                { errors.newPasswordConfirmation?.type === 'required' && <div>Required</div> }
-                { errors.newPasswordConfirmation?.type === 'value' && <div>Must be the same as new password</div> }
+                { errors.newPasswordConfirmation && <div>{errors.newPasswordConfirmation.message}</div> }
+
             </div>
 
             <button>Save</button>

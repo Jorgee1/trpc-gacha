@@ -6,9 +6,10 @@ import type { FastifyCookieOptions } from '@fastify/cookie'
 
 export const createContext = async ({req, res}: CreateFastifyContextOptions & FastifyCookieOptions) => {
     const token = req.cookies.token || ''
+    console.log('ASDASD', token)
     const session = await db.session.findUnique({where: {token}, select: {user: true}})
     
-    const user = session? session.user: undefined
+    const user = session?.user || null
 
     return {req, res, user}
 }

@@ -6,8 +6,9 @@ import { trpc } from '../trpc.js'
 
 import type { LoaderFunctionArgs } from 'react-router-dom'
 
+
 const bannerFormSchema = z.object({
-    name: z.string(),
+    name: z.string().min(1, {message: 'Required'}),
     isActive: z.boolean()
 })
 type BannerFormType = z.infer<typeof bannerFormSchema>
@@ -23,7 +24,7 @@ export const BannerEdit = () => {
     const updateBanner = trpc.banner.update.useMutation()
     const deleteBanner = trpc.banner.delete.useMutation({onSuccess: () => navigate('..')})
 
-    const { register, handleSubmit } = useForm<BannerFormType>({
+    const { register, handleSubmit, formState: {errors} } = useForm<BannerFormType>({
         resolver: zodResolver(bannerFormSchema),
         values: {
             name: data?.name || '',
@@ -38,7 +39,7 @@ export const BannerEdit = () => {
 
     const CharactersList = ({id}:{id:string}) => {
         const characterAddSchema = z.object({
-            characterId: z.string()
+            characterId: z.string().min(1, {message: 'Required'}).nonempty()
         })
         type CharacterAddSchema = z.infer<typeof characterAddSchema>
 
@@ -58,9 +59,10 @@ export const BannerEdit = () => {
                 refetch()
             }
         })
-        const { register, handleSubmit, reset } = useForm<CharacterAddSchema>()
+        const { register, handleSubmit, reset, formState: {errors} } = useForm<CharacterAddSchema>()
 
         const submit = ({ characterId }: CharacterAddSchema) => {
+            console.log(characterId)
             addCharacter.mutate({bannerId: id, characterId})
         }
 
@@ -71,10 +73,11 @@ export const BannerEdit = () => {
         return <>
             <h2>Add Character</h2>
             <form onSubmit={handleSubmit(submit)}>
-                <select {...register('characterId')}>
+                <select {...register('characterId', {required: true})}>
                     <option value=""></option>
                     { characterQuery.data?.map((e, i) => <option key={i} value={e.id}>{e.name}</option>) }
                 </select>
+                { errors.characterId && <div>{errors.characterId.message} ASD</div> }
                 <button>Save</button>
             </form>
             {data?.map((e,i) => <div key={i}>{e.name} - {e.tier} <button onClick={() => removeCharacterEvent(e.id)}>Remove</button></div>)}
@@ -87,6 +90,7 @@ export const BannerEdit = () => {
             <div>
                 <label>Name</label>
                 <input {...register('name')}/>
+                { errors.name && <div>{ errors.name.message }</div> }
             </div>
             <div>
                 <label>Active</label>

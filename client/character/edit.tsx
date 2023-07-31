@@ -50,8 +50,8 @@ export const CharacterEdit = () => {
     return <>
         <form onSubmit={handleSubmit(submit)}>
             <div>ID: { id }</div>
-            <div>Name: <input {...register('name', { required: true })}/></div>
-            <div>Tier: <input type='number' {...register('tier', { required: true, valueAsNumber: true })}/></div>
+            <div>Name: <input {...register('name')}/></div>
+            <div>Tier: <input type='number' {...register('tier', { valueAsNumber: true })}/></div>
             <button type='submit'>Save</button>
         </form>
         <button onClick={deleteCharacterEvent}>Delete</button>
